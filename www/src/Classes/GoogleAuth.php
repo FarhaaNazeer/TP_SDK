@@ -46,7 +46,7 @@ class GoogleAuth implements AuthInterface
 
         $loginPage = [
             'name' => $this->name,
-            'buttonYes' => "<a href=\"http://localhost:80/{$authorizationEndPoint}?client_id={$this->client_id}&redirect_uri={$this->redirect_uri}&response_type={$this->response_type}&scope={$this->scope}&access_type={$this->access_type}\">Oui</a>",
+            'buttonYes' => "<a href=\"{$authorizationEndPoint}?client_id={$this->client_id}&redirect_uri={$this->redirect_uri}&response_type={$this->response_type}&scope={$this->scope}&access_type={$this->access_type}\">Oui</a>",
             'buttonNo' => "<a href=\"http://localhost:80/{$this->redirect_uri}?client_id={$this->client_id}&redirect_uri={$this->redirect_uri}&response_type={$this->response_type}&scope={$this->scope}&access_type={$this->access_type}\">Non</a>"
         ];
 

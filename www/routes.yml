@@ -1,3 +1,7 @@
 /login:
   controller: "LoginController"
   action: 'login'
+
+/redirect_google
+  controller: "LoginController"
+  action: 'getCode'

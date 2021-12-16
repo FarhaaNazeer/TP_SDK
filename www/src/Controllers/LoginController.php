@@ -22,6 +22,10 @@ class LoginController
         echo $view['name'];
         echo $view ['buttonYes'];
         echo $view ['buttonNo'];
-        dd($view);
+    }
+
+    public function getCode()
+    {
+        dd($_GET);
     }
 }
