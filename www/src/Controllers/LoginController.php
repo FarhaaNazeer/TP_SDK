@@ -27,7 +27,7 @@ class LoginController
                 echo '<br><br>';
 
                 # FB AUTH
-                $fbAuth = new FacebookConnector($_ENV['FACEBOOK_CLIENT_ID'], $_ENV['FACEBOOK_REDIRECT_URI'], 'public_profile,email');
+                $fbAuth = new FacebookConnector($_ENV['FACEBOOK_CLIENT_ID'], $_ENV['FACEBOOK_REDIRECT_URI'], 'public_profile,email', $_ENV['FACEBOOK_STATE']);
 
                 $view = $fbAuth->login();
                 echo $view['loginButton'];

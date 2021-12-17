@@ -17,11 +17,12 @@ class FacebookAuth implements AuthInterface
     protected $scope = "basic";
     protected $state;
 
-    public function __construct(string $client_id, string $redirect_uri, string $scope)
+    public function __construct(string $client_id, string $redirect_uri, string $scope, string $state)
     {
         $this->client_id = $client_id;
         $this->redirect_uri = $redirect_uri;
         $this->scope = $scope;
+        $this->state = $state;
     }
 
 
@@ -31,8 +32,8 @@ class FacebookAuth implements AuthInterface
 
         $loginPage = [
             // 'name' => $this->name,
-            'loginButton' => "<a href=\"{$authorizationEndPoint}?client_id={$this->client_id}&redirect_uri={$this->redirect_uri}&scope={$this->scope}\">Se connecter via $this->name</a>",
-            'buttonYes' => "<a href=\"{$authorizationEndPoint}?client_id={$this->client_id}&redirect_uri={$this->redirect_uri}&scope={$this->scope}&name={$this->name}\">Oui</a>",
+            'loginButton' => "<a href=\"{$authorizationEndPoint}?client_id={$this->client_id}&redirect_uri={$this->redirect_uri}&scope={$this->scope}&state={$this->state}\">Se connecter via $this->name</a>",
+            'buttonYes' => "<a href=\"{$authorizationEndPoint}?client_id={$this->client_id}&redirect_uri={$this->redirect_uri}&scope={$this->scope}&state={$this->state}&name={$this->name}\">Oui</a>",
             'buttonNo' => "<a href=\"http://localhost/handle-failure\">Non</a>"
         ];
 
