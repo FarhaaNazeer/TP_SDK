@@ -6,6 +6,7 @@ require 'vendor/autoload.php';
 
 use App\Interfaces\AuthInterface;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 
 class GoogleAuth implements AuthInterface
 {
@@ -21,13 +22,13 @@ class GoogleAuth implements AuthInterface
     {
         $this->url = $url;
         $this->client_id = $client_id;
-        $this->redirect_uri = $redirect_uri;
+        $this->redirect_uri = urlencode($redirect_uri);
         $this->scope = $scope;
         $this->access_type = $access_type;
         $this->response_type = $response_type;
     }
 
-    public function getEndpoint() 
+    public function getEndpoint()
     {
         $client = new Client([
             'timeout' => 2.0,
@@ -35,13 +36,13 @@ class GoogleAuth implements AuthInterface
             // 'verify' => __DIR__ . '../../cacert.pem'
 
         ]);
-        
+
         $response = $client->request('GET', 'https://accounts.google.com/.well-known/openid-configuration');
 
         return $response;
     }
 
-    public function generateLoginButton() 
+    public function generateLoginButton()
     {
         $endPoints = $this->getEndpoint();
         $authorizationEndPoint = json_decode($endPoints->getBody())->authorization_endpoint;
@@ -53,23 +54,73 @@ class GoogleAuth implements AuthInterface
             'buttonNo' => "<a href=\"http://localhost:80/?client_id={$this->client_id}&redirect_uri={$this->redirect_uri}&response_type={$this->response_type}&scope={$this->scope}&access_type={$this->access_type}\">Non</a>"
         ];
 
-      return $loginPage;
-
+        return $loginPage;
     }
 
     public function getAuthorizationCode()
     {
-
-
-
-
     }
 
-    public function getAccessToken()
+    public function getAccessToken(string $code)
     {
+        $client = new Client([
+            'timeout' => 2.0,
+            'verify' => true
+            // 'verify' => __DIR__ . '../../cacert.pem'
+
+        ]);
+
+        $endPoints = $this->getEndpoint();
+        $tokenEndPoint = json_decode($endPoints->getBody())->token_endpoint;
+
+        $dotenv = \Dotenv\Dotenv::createImmutable(dirname(__DIR__, 2));
+        $dotenv->load();
+
+        try {
+            $response = $client->request('POST', $tokenEndPoint, [
+                'form_params' => [
+                    'code' => $code,
+                    'client_id' => $_ENV['GOOGLE_CLIENT_ID'],
+                    'client_secret' => $_ENV['GOOGLE_CLIENT_SECRET'],
+                    'redirect_uri' => $_ENV['GOOGLE_REDIRECT_URI'],
+                    'grant_type' => 'authorization_code'
+                ]
+            ]);
+
+            $access_token = json_decode($response->getBody())->access_token;
+
+            return $access_token;
+        } catch (GuzzleException\ClientException $e) {
+        }
     }
 
-    public function getUserInfo()
+    public function getUserInfo(string $accessToken)
     {
+        $client = new Client([
+            'timeout' => 2.0,
+            'verify' => true
+            // 'verify' => __DIR__ . '../../cacert.pem'
+
+        ]);
+
+        $endPoints = $this->getEndpoint();
+        $userInfoEndPoint = json_decode($endPoints->getBody())->userinfo_endpoint;
+
+        $response = $client->request('GET', $userInfoEndPoint, [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $accessToken
+            ]
+        ]);
+
+        $response = json_decode($response->getBody());
+
+        if ($response->email_verified === true) {
+            session_start();
+            $_SESSION['email'] = $response->email;
+
+            header('Location: /login ');
+        }
+
+        return $response;
     }
 }

@@ -1,6 +1,6 @@
 /404:
   controller: "LoginController"
-  action: 'error404'
+  action: 'handleSuccess'
 
 /login:
   controller: "LoginController"
