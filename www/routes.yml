@@ -17,3 +17,7 @@
 /redirect_facebook:
   controller: "LoginController"
   action: 'handleSuccess'
+
+/redirect_slack:
+  controller: "LoginController"
+  action: 'handleSuccess'

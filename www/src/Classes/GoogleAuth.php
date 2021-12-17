@@ -90,6 +90,7 @@ class GoogleAuth implements AuthInterface
 
             return $access_token;
         } catch (GuzzleException\ClientException $e) {
+            echo $e->getMessage();
         }
     }
 

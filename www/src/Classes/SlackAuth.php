@@ -3,6 +3,7 @@
 namespace App\Classes;
 
 use App\Interfaces\AuthInterface;
+use GuzzleHttp\Client;
 
 require 'vendor/autoload.php';
 
@@ -39,6 +40,33 @@ class SlackAuth implements AuthInterface
 
     public function getAccessToken(string $code)
     {
+        $client = new Client([
+            'timeout' => 2.0,
+            'verify' => true
+            // 'verify' => __DIR__ . '../../cacert.pem'
+
+        ]);
+
+        $tokenEndPoint = 'https://slack.com/api/oauth.access?';
+
+        $dotenv = \Dotenv\Dotenv::createImmutable(dirname(__DIR__, 2));
+        $dotenv->load();
+
+        try {
+            $response = $client->request('GET', $tokenEndPoint, [
+                'form_params' => [
+                    'client_id' => $_ENV['SLACK_CLIENT_ID'],
+                    'client_secret' => $_ENV['SLACK_CLIENT_SECRET'],
+                    'redirect_uri' => $_ENV['SLACK_REDIRECT_URI'],
+                    'code' => $code,
+                ]
+            ]);
+        } catch (GuzzleException\ClientException $e) {
+
+            echo $e->getMessage();
+        }
+
+        dd(json_decode($response->getBody()));
     }
 
     public function getUserInfo(string $accessToken)
