@@ -8,7 +8,7 @@ use App\AbstractClass\AuthConnectorFactory;
 use App\Interfaces\AuthInterface;
 
 
-class FacebookConnector extends AuthConnectorFactory
+class SlackConnector extends AuthConnectorFactory
 {
 
     private $client_id;
@@ -25,6 +25,6 @@ class FacebookConnector extends AuthConnectorFactory
 
     public function getAuthConnector(): AuthInterface
     {
-        return new FacebookAuth($this->client_id, $this->redirect_uri, $this->scope);
+        return new SlackAuth($this->client_id, $this->redirect_uri, $this->scope);
     }
 }

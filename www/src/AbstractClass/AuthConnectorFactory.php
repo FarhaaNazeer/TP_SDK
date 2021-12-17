@@ -35,6 +35,7 @@ abstract class AuthConnectorFactory
     {
         $auth = $this->getAuth();
         $accessToken = $auth->getAccessToken($code);
+        dd($accessToken);
         $userInfo = $auth->getUserInfo($accessToken);
 
         return $userInfo;

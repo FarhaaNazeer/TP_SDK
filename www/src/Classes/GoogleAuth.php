@@ -11,7 +11,6 @@ use GuzzleHttp\Exception\GuzzleException;
 class GoogleAuth implements AuthInterface
 {
     private $name = "Google";
-    private $url;
     private $client_id;
     private $redirect_uri;
     private $scope;
@@ -50,8 +49,8 @@ class GoogleAuth implements AuthInterface
         $loginPage = [
             // 'name' => $this->name,
             'loginButton' => "<a href=\"{$authorizationEndPoint}?client_id={$this->client_id}&redirect_uri={$this->redirect_uri}&response_type={$this->response_type}&scope={$this->scope}&access_type={$this->access_type}\">Se connecter via $this->name</a>",
-            // 'buttonYes' => "<a href=\"{$authorizationEndPoint}?client_id={$this->client_id}&redirect_uri={$this->redirect_uri}&response_type={$this->response_type}&scope={$this->scope}&access_type={$this->access_type}\">Oui</a>",
-            //'buttonNo' => "<a href=\"http://localhost:80/?client_id={$this->client_id}&redirect_uri={$this->redirect_uri}&response_type={$this->response_type}&scope={$this->scope}&access_type={$this->access_type}\">Non</a>"
+            'buttonYes' => "<a href=\"{$authorizationEndPoint}?client_id={$this->client_id}&redirect_uri={$this->redirect_uri}&response_type={$this->response_type}&scope={$this->scope}&access_type={$this->access_type}&name={$this->name}\">Oui</a>",
+            'buttonNo' => "<a href=\"http://localhost/handle-failure\">Non</a>"
         ];
 
         return $loginPage;

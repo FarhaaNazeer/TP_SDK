@@ -2,6 +2,10 @@
   controller: "LoginController"
   action: 'handleSuccess'
 
+/handle-failure:
+  controller: "LoginController"
+  action: 'handleFailure'
+
 /login:
   controller: "LoginController"
   action: 'login'
@@ -9,3 +13,7 @@
 /redirect_google:
   controller: "LoginController"
   action: 'getCode'
+
+/redirect_facebook:
+  controller: "LoginController"
+  action: 'handleSuccess'
