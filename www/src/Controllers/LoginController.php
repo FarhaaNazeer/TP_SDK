@@ -38,7 +38,7 @@ class LoginController
 
 
                 # SLACK AUTH
-                $slackAuth = new SlackConnector($_ENV['SLACK_CLIENT_ID'], $_ENV['SLACK_REDIRECT_URI'], 'users:read.email');
+                $slackAuth = new SlackConnector($_ENV['SLACK_CLIENT_ID'], $_ENV['SLACK_REDIRECT_URI'], 'team:read');
                 $view = $slackAuth->login();
 
                 echo $view['loginButton'];
@@ -50,7 +50,6 @@ class LoginController
         public function handleSuccess()
         {
                 $uri = $_SERVER['REDIRECT_URL'];
-
                 $dotenv = \Dotenv\Dotenv::createImmutable(dirname(__DIR__, 2));
                 $dotenv->load();
                 if ($uri === '/redirect_google') {
@@ -65,6 +64,12 @@ class LoginController
 
                         $code = $_GET['code'];
                         $userInfo = $fbAuth->handleSuccess($code);
+                } else {
+                        #SLACK AUTH
+                        $slackAuth = new SlackConnector($_ENV['SLACK_CLIENT_ID'], $_ENV['SLACK_REDIRECT_URI'], 'team:read');
+
+                        $code = $_GET['code'];
+                        $userInfo = $slackAuth->handleSuccess($code);
                 }
 
                 #FACEBOOK AUTH

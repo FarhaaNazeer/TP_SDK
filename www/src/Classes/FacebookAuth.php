@@ -66,12 +66,12 @@ class FacebookAuth implements AuthInterface
                     'code' => $code,
                 ]
             ]);
-            dd($response);
             $access_token = json_decode($response->getBody())->access_token;
 
 
             return $access_token;
         } catch (GuzzleException\ClientException $e) {
+            echo $e->getMessage();
         }
     }
     public function getUserInfo(string $accessToken)
