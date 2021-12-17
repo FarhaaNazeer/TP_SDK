@@ -17,6 +17,7 @@ class LoginController
 
         $view = $googleAuth->login();
 
+        
         echo $view['loginButton'];
         // echo $view ['buttonYes'];
         // echo $view ['buttonNo'];
