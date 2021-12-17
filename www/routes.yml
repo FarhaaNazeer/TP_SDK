@@ -1,7 +1,11 @@
+/404:
+  controller: "LoginController"
+  action: 'handleSuccess'
+
 /login:
   controller: "LoginController"
   action: 'login'
 
-/redirect_google
+/redirect_google:
   controller: "LoginController"
   action: 'getCode'

@@ -8,14 +8,15 @@ abstract class AuthConnectorFactory
 {
     abstract public function getAuthConnector(): AuthInterface;
 
-   public function getAuth() 
-   {
-         $auth = $this->getAuthConnector();
-         return $auth;
-   }
+    public function getAuth()
+    {
+        $auth = $this->getAuthConnector();
+        return $auth;
+    }
+
     public function connect(): void
     {
-    
+
         // $auth = $this->getAuthConnector();
         // $auth->getAuthorizationCode();
         // $auth->getAccessToken();
@@ -28,5 +29,14 @@ abstract class AuthConnectorFactory
         $loginButton = $auth->generateLoginButton();
 
         return $loginButton;
-    } 
+    }
+
+    public function handleSuccess(string $code)
+    {
+        $auth = $this->getAuth();
+        $accessToken = $auth->getAccessToken($code);
+        $userInfo = $auth->getUserInfo($accessToken);
+
+        return $userInfo;
+    }
 }

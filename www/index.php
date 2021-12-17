@@ -35,6 +35,9 @@ if (isset($listOfRoutes[$uri])) {
     // var_dump($selectedRoute);
     // echo '</pre>';
 }
+else {
+    $selectedRoute = $listOfRoutes['/404'];
+}
 
 $controller = $selectedRoute['controller'];
 $action = $selectedRoute['action'];
