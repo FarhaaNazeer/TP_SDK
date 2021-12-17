@@ -7,34 +7,34 @@ use App\Classes\GoogleConnector;
 
 class LoginController
 {
-    public function login()
-    {
+        public function login()
+        {
 
-        $dotenv = \Dotenv\Dotenv::createImmutable(dirname(__DIR__, 2));
-        $dotenv->load();
+                $dotenv = \Dotenv\Dotenv::createImmutable(dirname(__DIR__, 2));
+                $dotenv->load();
 
-        $googleAuth = new GoogleConnector($_ENV['GOOGLE_AUTHORIZATION_URL'], $_ENV['GOOGLE_CLIENT_ID'], $_ENV['GOOGLE_REDIRECT_URI'], 'email', 'online', 'code');
+                $googleAuth = new GoogleConnector($_ENV['GOOGLE_AUTHORIZATION_URL'], $_ENV['GOOGLE_CLIENT_ID'], $_ENV['GOOGLE_REDIRECT_URI'], 'email', 'online', 'code');
 
-        $view = $googleAuth->login();
+                $view = $googleAuth->login();
 
-        echo $view['loginButton'];
-        // echo $view ['buttonYes'];
-        // echo $view ['buttonNo'];
-    }
+                echo $view['loginButton'];
+                // echo $view ['buttonYes'];
+                // echo $view ['buttonNo'];
+        }
 
-    public function handleSuccess()
-    {
-        $dotenv = \Dotenv\Dotenv::createImmutable(dirname(__DIR__, 2));
-        $dotenv->load();
+        public function handleSuccess()
+        {
+                $dotenv = \Dotenv\Dotenv::createImmutable(dirname(__DIR__, 2));
+                $dotenv->load();
 
-        $googleAuth = new GoogleConnector($_ENV['GOOGLE_AUTHORIZATION_URL'], $_ENV['GOOGLE_CLIENT_ID'], $_ENV['GOOGLE_REDIRECT_URI'], 'email', 'online', 'code');
+                $googleAuth = new GoogleConnector($_ENV['GOOGLE_AUTHORIZATION_URL'], $_ENV['GOOGLE_CLIENT_ID'], $_ENV['GOOGLE_REDIRECT_URI'], 'email', 'online', 'code');
 
-        $code = $_GET['code'];
+                $code = $_GET['code'];
 
-        $userInfo = $googleAuth->handleSuccess($code);
+                $userInfo = $googleAuth->handleSuccess($code);
 
-        echo '<h1>Success !</h1>';
-        echo $userInfo->email;
-        dd($userInfo);
-    }
+                echo '<h1>Success !</h1>';
+                echo $userInfo->email;
+                dd($userInfo);
+        }
 }
