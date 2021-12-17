@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Controllers;
 
 use App\Classes\GoogleConnector;
@@ -19,13 +18,18 @@ class LoginController
 
         $view = $googleAuth->login();
 
-        echo $view['name'];
-        echo $view ['buttonYes'];
-        echo $view ['buttonNo'];
+        echo $view['loginButton'];
+        // echo $view ['buttonYes'];
+        // echo $view ['buttonNo'];
     }
 
     public function getCode()
     {
-        dd($_GET);
+        dd($_GET['code']);
+    }
+
+    public function error404()
+    {
+        echo 'Page 404';
     }
 }

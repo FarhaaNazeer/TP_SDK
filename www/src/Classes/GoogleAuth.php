@@ -32,6 +32,8 @@ class GoogleAuth implements AuthInterface
         $client = new Client([
             'timeout' => 2.0,
             'verify' => true
+            // 'verify' => __DIR__ . '../../cacert.pem'
+
         ]);
         
         $response = $client->request('GET', 'https://accounts.google.com/.well-known/openid-configuration');
@@ -45,9 +47,10 @@ class GoogleAuth implements AuthInterface
         $authorizationEndPoint = json_decode($endPoints->getBody())->authorization_endpoint;
 
         $loginPage = [
-            'name' => $this->name,
-            'buttonYes' => "<a href=\"{$authorizationEndPoint}?client_id={$this->client_id}&redirect_uri={$this->redirect_uri}&response_type={$this->response_type}&scope={$this->scope}&access_type={$this->access_type}\">Oui</a>",
-            'buttonNo' => "<a href=\"http://localhost:80/{$this->redirect_uri}?client_id={$this->client_id}&redirect_uri={$this->redirect_uri}&response_type={$this->response_type}&scope={$this->scope}&access_type={$this->access_type}\">Non</a>"
+            // 'name' => $this->name,
+            'loginButton' => "<a href=\"{$authorizationEndPoint}?client_id={$this->client_id}&redirect_uri={$this->redirect_uri}&response_type={$this->response_type}&scope={$this->scope}&access_type={$this->access_type}\">Se connecter via $this->name</a>",
+            // 'buttonYes' => "<a href=\"{$authorizationEndPoint}?client_id={$this->client_id}&redirect_uri={$this->redirect_uri}&response_type={$this->response_type}&scope={$this->scope}&access_type={$this->access_type}\">Oui</a>",
+            'buttonNo' => "<a href=\"http://localhost:80/?client_id={$this->client_id}&redirect_uri={$this->redirect_uri}&response_type={$this->response_type}&scope={$this->scope}&access_type={$this->access_type}\">Non</a>"
         ];
 
       return $loginPage;
