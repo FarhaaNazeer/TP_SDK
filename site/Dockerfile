@@ -1,25 +1,25 @@
-FROM php:7.2-apache
+FROM php:7.4-fpm-alpine
 
-# Install PDO MySQL driver
-# See https://github.com/docker-library/php/issues/62
-RUN docker-php-ext-install pdo mysqli pdo_mysql 
+RUN apk add --no-cache autoconf openssl-dev g++ make pcre-dev icu-dev zlib-dev libzip-dev && \
+    docker-php-ext-install bcmath intl opcache zip sockets && \
+    apk del --purge autoconf g++ make && \
+    mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
-RUN apt-get update -y && apt-get install -y libpng-dev libfreetype6-dev libyaml-dev
+WORKDIR /var/www/html/
 
-RUN pecl install yamL
+COPY . .
 
-RUN docker-php-ext-configure gd \
-        --with-freetype-dir=/usr/include/freetype2 \
-    && docker-php-ext-install gd
+ENV PORT=80
 
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint
+RUN chmod +x /usr/local/bin/docker-entrypoint
+ENTRYPOINT ["docker-entrypoint"]
 
+COPY --from=caddy /usr/bin/caddy /usr/local/bin/caddy
 
-# Workaround for write permission on write to MacOS X volumes
-# See https://github.com/boot2docker/boot2docker/pull/534
-RUN usermod -u 1000 www-data
+RUN caddy validate --config Caddyfile && \
+    cp php-fpm.conf /usr/local/etc/php-fpm.d/zz-docker.conf
 
-# Enable Apache mod_rewrite
-RUN a2enmod rewrite
+EXPOSE 80
 
-# Enable yaml
-#RUN a2enmod yaml
+CMD ["caddy", "run", "--config", "Caddyfile"]
